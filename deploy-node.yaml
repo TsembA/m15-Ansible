@@ -1,0 +1,19 @@
+---
+- name: Install Node and Npm
+  hosts: webserver
+  tasks:
+    - name: Update apt repo and cache
+      apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+    - name: Install NodeJs and Npm
+      apt:
+        pkg:
+        - nodejs
+        - npm
+
+- name: Deploy NodeJs App
+  hosts: webserver
+  tasks:
+    - name: Unpack the NodeJs tar file
+      unarchive:
+        src: /Users/tsemb/m15-Ansible/nodejs-app/nodejs-app-1.0.0.tgz
+        dest: /root/
