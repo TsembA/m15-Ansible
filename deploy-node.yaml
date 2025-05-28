@@ -10,10 +10,35 @@
         - nodejs
         - npm
 
+
+- name: Crete new User
+  hosts: webserver
+  tasks:
+   - name: Create Linux User
+     user:
+      name: ansible-user
+      comment: Ansible Admin
+      group: admin
+
 - name: Deploy NodeJs App
   hosts: webserver
+  become: True
+  become_user: ansible-user
   tasks:
     - name: Unpack the NodeJs tar file
       unarchive:
         src: /Users/tsemb/m15-Ansible/nodejs-app/nodejs-app-1.0.0.tgz
-        dest: /root/
+        dest: /home/ansible-user
+    - name : Install dependencies
+      npm:
+        path: /home/ansible-user/package
+    - name: Start the application
+      command:
+        chdir: /home/ansible-user/app
+        cmd: node server
+      async: 1000
+      poll: 0
+    - name: Enshure app is running
+      shell: ps aux | grep node
+      register: app_status
+    - debug: msg={{app_status.stdout_lines}}
