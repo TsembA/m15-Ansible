@@ -1,0 +1,50 @@
+---
+- name: Install Docker
+  hosts: docker_server
+  become: yes
+  become_user: root
+  tasks:
+    - name: Install Docker manually to avoid yum/dnf module bug
+      command: yum install -y docker
+    - name: Start Docker service
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+    - name: Start Docker daemon
+      systemd:
+        name: docker
+        state: started
+
+- name: Install Docker-compose
+  hosts: docker_server
+  tasks:
+    - name: Create Docker-compose directory
+      file:
+        path: ~/.docker/cli-plugins
+        state: directory
+    - name: Install Docker-compose
+      get_url:
+        url: https://github.com/docker/compose/releases/download/v2.2.2/docker-compose-linux-x86_64
+        dest: ~/.docker/cli-plugins/docker-compose
+        mode: +x
+
+- name: Add ec2-user to docker group
+  hosts: docker_server
+  become: yes
+  tasks:
+    - name: Add ec2-user to docker group
+      user:
+        name: ec2-user
+        groups: docker
+        append: yes
+    - name: Reconnect to server
+      meta: reset_connection
+
+- name: Test docker pull
+  hosts: docker_server
+  tasks:
+    - name: Pull redis
+      docker_image:
+        name: redis
+        source: pull
