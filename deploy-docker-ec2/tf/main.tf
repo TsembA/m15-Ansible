@@ -11,6 +11,7 @@ variable "my_ip" {}
 variable "instance_type" {}
 variable "public_key_location" {}
 variable "image_name" {}
+variable "ssh_key_private" {}
 
 # Create VPC
 resource "aws_vpc" "myapp_vpc" {
@@ -117,9 +118,11 @@ resource "aws_instance" "myapp_server" {
   associate_public_ip_address = true
   key_name                    = aws_key_pair.ssh-key.key_name
 
-  user_data = file("install-python.sh")
-
-  user_data_replace_on_change = true
+  provisioner "local-exec" {
+    working_dir = "/Users/tsemb/m15-Ansible/deploy-docker-ec2"
+    command = "ansible-playbook --inventory ${self.public_ip}, --user ec2-user --private-key ${var.ssh_key_private} deploy-docker-new-user.yaml "
+    
+  }
 
   tags = {
     Name = "${var.env_prefix}-server"
