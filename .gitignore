@@ -1,19 +1,30 @@
-# Terraform
-.terraform/
-*tf
-*.tfstate
-*.tfstate.backup
+# VSCode
+.vscode/
 
 # Ansible
+.ansible/
 *.retry
+hosts
+project-vars
+.env
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+terraform.tfvars
+project-vars.terraform/
+deploy-docker-ec2/.terraform/
+deploy-docker-ec2/tf/
 
 # Node.js
 node_modules/
 *.tgz
+nodejs-app/
 
-# System
+# System files
 .DS_Store
-.env
 
-**/tf/
-
+# Python virtual env
+.venv/
