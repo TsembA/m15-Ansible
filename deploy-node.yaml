@@ -1,44 +1,57 @@
 ---
 - name: Install Node and Npm
   hosts: webserver
+  become: yes
   tasks:
     - name: Update apt repo and cache
-      apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+      apt: 
+        update_cache: yes 
+        force_apt_get: yes 
+        cache_valid_time: 3600
+
     - name: Install NodeJs and Npm
       apt:
         pkg:
-        - nodejs
-        - npm
-
+          - nodejs
+          - npm
 
 - name: Crete new User
   hosts: webserver
+  become: yes
   tasks:
-   - name: Create Linux User
-     user:
-      name: ansible-user
-      comment: Ansible Admin
-      group: admin
+    - name: Create Linux User
+      user:
+        name: ansible-user
+        comment: Ansible Admin
+        groups: sudo
+        shell: /bin/bash
+        create_home: yes
 
 - name: Deploy NodeJs App
   hosts: webserver
-  become: True
+  become: true
   become_user: ansible-user
   tasks:
     - name: Unpack the NodeJs tar file
       unarchive:
         src: /Users/tsemb/m15-Ansible/nodejs-app/nodejs-app-1.0.0.tgz
         dest: /home/ansible-user
-    - name : Install dependencies
+        remote_src: no
+
+    - name: Install dependencies
       npm:
         path: /home/ansible-user/package
+
     - name: Start the application
-      command:
+      command: node server.js
+      args:
         chdir: /home/ansible-user/app
-        cmd: node server
       async: 1000
       poll: 0
+
     - name: Enshure app is running
-      shell: ps aux | grep node
+      shell: ps aux | grep '[n]ode'
       register: app_status
-    - debug: msg={{app_status.stdout_lines}}
+
+    - debug: 
+        msg: "{{ app_status.stdout_lines }}"

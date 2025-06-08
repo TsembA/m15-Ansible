@@ -1,64 +1,44 @@
 ---
-- name: Install Python dependencies
-  hosts: docker_server
-  become: yes
-  tasks:
-    - name: Install pip for Python 3.8
-      command: python3.8 -m ensurepip --upgrade
-      args:
-        creates: /usr/bin/pip3.8
-
-    - name: Downgrade urllib3 to compatible version
-      pip:
-        executable: pip3.8
-        name:
-          - "urllib3<2.0.0"
-          - requests
+# Install and start Docker on ec2 linux server
 - name: Install Docker
   hosts: docker_server
   become: yes
-  become_user: root
   tasks:
-    - name: Install Docker manually to avoid yum/dnf module bug
-      command: yum install -y docker
-    - name: Start Docker service
+    - name: Install Docker
+      yum:
+        name: docker
+        update_cache: yes
+        state: present
+    - name: Start Docker deamon
       systemd:
         name: docker
         state: started
-        enabled: yes
-    - name: Start Docker daemon
-      systemd:
-        name: docker
-        state: started
-
+# Fetch and install Docker-compose
 - name: Install Docker-compose
   hosts: docker_server
-  become: yes
-  become_user: ec2-user
   tasks:
-    - name: Create Docker-compose directory
+    - name: Create Docker-compose dir
       file:
         path: ~/.docker/cli-plugins
         state: directory
-    - name: Install Docker-compose v2.26.1
+    - name: Install Docker-compose
       get_url:
         url: https://github.com/docker/compose/releases/download/v2.26.1/docker-compose-linux-x86_64
         dest: /home/ec2-user/.docker/cli-plugins/docker-compose
         mode: +x
-      
-
+# Add ec2-user to docker group
 - name: Add ec2-user to docker group
   hosts: docker_server
   become: yes
   tasks:
     - name: Add ec2-user to docker group
-      user:
+      user: 
         name: ec2-user
         groups: docker
         append: yes
-    - name: Reconnect to server
+    - name: Recconect to server session
       meta: reset_connection
-
+# Copy docker-compose file to ec2 instance and start docker contaners
 - name: Start docker container
   hosts: docker_server
   become: yes
@@ -69,7 +49,7 @@
   tasks:
     - name: Copy docker compose
       copy:
-        src: /Users/tsemb/m15-Ansible/deploy-to-ec2-tf-ansible/docker-compose-full.yaml
+        src: /Users/tsemb/m15-Ansible/deploy-docker-ec2/docker-compose-full.yaml
         dest: /home/ec2-user/docker-compose.yaml
     - name: Docker login
       docker_login:

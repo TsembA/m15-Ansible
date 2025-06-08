@@ -1,13 +1,6 @@
-# local .terraform dir
-.terraform
+.vscode
 
-# tf state files
-*.tfstate
-*.tfstate.*
-
-# variables files, may include sensetive data
-*.tfvars
-terraform.tfvars
-
+.ansible
+hosts
 .env
 project-vars
