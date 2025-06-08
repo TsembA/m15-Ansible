@@ -17,4 +17,5 @@ project-vars
 terraform.tfvars
 
 .env
-project-vars
+project-vars.terraform/
+*nodejs-app
