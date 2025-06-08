@@ -30,4 +30,4 @@ nodejs-app/
 .venv/
 .terraform/
 .vscode
-*nodejs-app
+nodejs-app/

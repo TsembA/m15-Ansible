@@ -1,6 +1,0 @@
-[webserver]
-64.23.138.38 ansible_python_interpreter=/usr/bin/python3.12
-
-[webserver:vars]
-ansible_ssh_private_key=~/.ssh/id_ed25519
-ansible_user=root
