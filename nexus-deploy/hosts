@@ -1,6 +1,0 @@
-[nexus]
-147.182.225.108 ansible_python_interpreter=/usr/bin/python3.12
-
-[nexus:vars]
-ansible_ssh_private_key=~/.ssh/id_ed25519
-ansible_user=root
