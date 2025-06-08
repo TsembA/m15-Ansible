@@ -1,0 +1,7 @@
+---
+plugin: aws_ec2
+regions:
+  - us-west-1
+filtes:
+  tag:Name: dev*
+  instance-state-name: running

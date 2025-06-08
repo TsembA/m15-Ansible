@@ -27,7 +27,7 @@ nodejs-app/
 .DS_Store
 
 # Python virtual env
-.venv/
-.terraform/
-.vscode
+*.venv/
+*.terraform/
+*.vscode
 nodejs-app/
