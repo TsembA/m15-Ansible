@@ -6,7 +6,7 @@ hosts
 project-vars
 
 # local .terraform dir
-*.terraform
+.terraform
 
 # tf state files
 *.tfstate
