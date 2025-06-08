@@ -43,6 +43,8 @@
   hosts: all
   become: yes
   become_user: tsemb
+  vars_files:
+    - project-vars
   tasks:
     - name: Create Docker-compose dir
       file:
