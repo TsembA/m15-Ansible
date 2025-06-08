@@ -2,10 +2,11 @@
 
 .ansible
 hosts
-nodejs-ap*
+.env
+project-vars
 
 # local .terraform dir
-.terraform
+*.terraform
 
 # tf state files
 *.tfstate
