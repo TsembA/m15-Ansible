@@ -29,5 +29,3 @@ nodejs-app/
 # Python virtual env
 .venv/
 .terraform/
-.terraform/
-.terraform/
