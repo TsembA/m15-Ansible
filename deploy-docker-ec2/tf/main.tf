@@ -118,16 +118,22 @@ resource "aws_instance" "myapp_server" {
   associate_public_ip_address = true
   key_name                    = aws_key_pair.ssh-key.key_name
 
-  provisioner "local-exec" {
-    working_dir = "/Users/tsemb/m15-Ansible/deploy-docker-ec2"
-    command = "ansible-playbook --inventory ${self.public_ip}, --user ec2-user --private-key ${var.ssh_key_private} deploy-docker-new-user.yaml "
-    
-  }
-
   tags = {
     Name = "${var.env_prefix}-server"
   }
 }
+
+resource "null_resource" "configure_server" {
+  triggers = {
+    trigger = aws_instance.myapp_server.public_ip
+  }
+  provisioner "local-exec" {
+    working_dir = "/Users/tsemb/m15-Ansible/deploy-docker-ec2"
+    command = "ansible-playbook --inventory ${aws_instance.myapp_server.public_ip}, --user ec2-user --private-key ${var.ssh_key_private} deploy-docker-new-user.yaml"
+  }
+}
+
+
 
 # Outputs
 output "aws_ami_id" {
