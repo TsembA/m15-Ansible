@@ -1,24 +1,29 @@
 ---
+# Install Node and NPM play
 - name: Install Node and Npm
   hosts: webserver
   become: yes
   tasks:
+    # Update the apt package index with a forced refresh
     - name: Update apt repo and cache
       apt: 
         update_cache: yes 
         force_apt_get: yes 
         cache_valid_time: 3600
 
+    # Install Node.js and npm packages from apt
     - name: Install NodeJs and Npm
       apt:
         pkg:
           - nodejs
           - npm
 
+# Create a new Linux user for deploying the Node.js app
 - name: Crete new User
   hosts: webserver
   become: yes
   tasks:
+    # Create a new user named 'ansible-user' with sudo access
     - name: Create Linux User
       user:
         name: ansible-user
@@ -27,21 +32,25 @@
         shell: /bin/bash
         create_home: yes
 
+# Deploy and run the Node.js application
 - name: Deploy NodeJs App
   hosts: webserver
   become: true
   become_user: ansible-user
   tasks:
+    # Unpack the Node.js application tarball into the user's home directory
     - name: Unpack the NodeJs tar file
       unarchive:
         src: /Users/tsemb/m15-Ansible/nodejs-app/nodejs-app-1.0.0.tgz
         dest: /home/ansible-user
         remote_src: no
 
+    # Install app dependencies using npm
     - name: Install dependencies
       npm:
         path: /home/ansible-user/package
 
+    # Start the Node.js application asynchronously
     - name: Start the application
       command: node server.js
       args:
@@ -49,9 +58,11 @@
       async: 1000
       poll: 0
 
+    # Check if the Node.js app process is running
     - name: Enshure app is running
       shell: ps aux | grep '[n]ode'
       register: app_status
 
+    # Print the process status for debugging
     - debug: 
         msg: "{{ app_status.stdout_lines }}"
