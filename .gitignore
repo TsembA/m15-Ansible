@@ -15,4 +15,5 @@ node_modules/
 .DS_Store
 .env
 
-deploy-docker-ec2/tf/
+**/tf/
+
