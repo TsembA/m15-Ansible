@@ -1,0 +1,7 @@
+version: 1.0.0 
+location: /Users/tsemb/ansible/nodejs-app 
+linux_name: tsemb
+user_home_dir: /home/{{linux_name}}
+docker_password: Sspkq1q87!
+user_groups: adm, docker
+docker_compose_url: https://github.com/docker/compose/releases/download/v2.26.1/docker-compose-linux-x86_64

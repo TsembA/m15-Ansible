@@ -1,21 +1,18 @@
-.vscode
-
-.ansible
-hosts
-.env
-project-vars
-
-# local .terraform dir
-.terraform
-
-# tf state files
+# Terraform
+.terraform/
+*tf
 *.tfstate
-*.tfstate.*
+*.tfstate.backup
 
-# variables files, may include sensetive data
-*.tfvars
-terraform.tfvars
+# Ansible
+*.retry
 
+# Node.js
+node_modules/
+*.tgz
+
+# System
+.DS_Store
 .env
-project-vars.terraform/
-*nodejs-app
+
+deploy-docker-ec2/tf/
