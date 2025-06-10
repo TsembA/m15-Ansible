@@ -133,7 +133,7 @@ resource "aws_instance" "myapp_server-two" {
   key_name                    = aws_key_pair.ssh-key.key_name
 
   tags = {
-    Name = "${var.env_prefix}-server-two"
+    Name = "${var.env_prefix}-server"
   }
 }
 
@@ -147,10 +147,22 @@ resource "aws_instance" "myapp_server-three" {
   key_name                    = aws_key_pair.ssh-key.key_name
 
   tags = {
-    Name = "${var.env_prefix}-server-three"
+    Name = "prov-server"
   }
 }
+resource "aws_instance" "myapp_server-four" {
+  ami                         = data.aws_ami.lts_amazon_linux.id
+  instance_type               = "t2.small"
+  subnet_id                   = aws_subnet.myapp_subnet.id
+  vpc_security_group_ids      = [aws_default_security_group.myapp_sg.id]
+  availability_zone           = var.avail_zone
+  associate_public_ip_address = true
+  key_name                    = aws_key_pair.ssh-key.key_name
 
+  tags = {
+    Name = "prov-server"
+  }
+}
 
 
 # Outputs
