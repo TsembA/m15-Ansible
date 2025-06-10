@@ -1,0 +1,27 @@
+---
+- name: Deploy app in new namespace
+  hosts: localhost
+  tasks:
+    - name: create a k8s namespace
+      kubernetes.core.k8s:
+        name: my-app
+        api_version: v1
+        kind: Namespace
+        state: present
+    - name: Create nginx ConfigMap from local file
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: nginx-config
+            namespace: my-app
+          data:
+            nginx.conf: "{{ lookup('file', '/Users/tsemb/m12-Terraform/nginx.conf') }}"
+    - name: Deploy Nginx app
+      kubernetes.core.k8s:
+        src: /Users/tsemb/m12-Terraform/nginx-deployment.yaml
+        state: present
+        kubeconfig: /Users/tsemb/.kube/config
+        namespace: my-app
