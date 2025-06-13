@@ -147,7 +147,7 @@ resource "aws_instance" "myapp_server-three" {
   key_name                    = aws_key_pair.ssh-key.key_name
 
   tags = {
-    Name = "prov-server"
+    Name = "prod-server"
   }
 }
 resource "aws_instance" "myapp_server-four" {
@@ -160,7 +160,7 @@ resource "aws_instance" "myapp_server-four" {
   key_name                    = aws_key_pair.ssh-key.key_name
 
   tags = {
-    Name = "prov-server"
+    Name = "prod-server"
   }
 }
 

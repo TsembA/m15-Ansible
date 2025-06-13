@@ -1,5 +1,5 @@
 [docker-server]
-54.153.36.62 ansible_python_interpreter=/usr/bin/python3.12
+54.153.36.62 ansible_python_interpreter=/usr/bin/python3
 
 [docker-server:vars]
 ansible_ssh_private_key=~/.ssh/id_ed25519
